@@ -9,6 +9,7 @@ import { ext, isWindows10RS4OrNewer, isWindows10RS3OrNewer } from "../extension"
 suite("windowsVersion", () => {
     function testIsWindows10RS4OrNewer(release: string, expectedResult: boolean): void {
         test(`isWindows10RS4OrNewer: ${release}`, () => {
+            assert.fail();
             let previousOs = ext.os;
             try {
                 ext.os = {
