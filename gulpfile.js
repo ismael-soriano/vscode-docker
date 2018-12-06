@@ -14,12 +14,12 @@ const glob = require('glob');
 
 const env = process.env;
 
-gulp.task('webpack-dev', async () => {
+gulp.task('webpack-dev', () => {
     preWebpack();
     return spawn(path.join(__dirname, './node_modules/.bin/webpack'), ['--mode', 'development'], { stdio: 'inherit', env });
 });
 
-gulp.task('webpack-prod', async () => {
+gulp.task('webpack-prod', () => {
     preWebpack();
     return spawn(path.join(__dirname, './node_modules/.bin/webpack'), ['--mode', 'production'], { stdio: 'inherit', env });
 });
@@ -28,7 +28,7 @@ gulp.task('webpack-prod', async () => {
  * Installs the azure account extension before running tests (otherwise our extension would fail to activate)
  * NOTE: The version isn't super important since we don't actually use the account extension in tests
  */
-gulp.task('install-azure-account', async () => {
+gulp.task('install-azure-account', () => {
     const version = '0.4.3';
     const extensionPath = path.join(os.homedir(), `.vscode/extensions/ms-vscode.azure-account-${version}`);
     const existingExtensions = glob.sync(extensionPath.replace(version, '*'));
@@ -44,10 +44,11 @@ gulp.task('install-azure-account', async () => {
             .pipe(gulp.dest(extensionPath));
     } else {
         console.log('Azure Account extension already installed.');
+        return Promise.resolve();
     }
 });
 
-gulp.task('test', gulp.series('install-azure-account', async () => {
+gulp.task('test', gulp.series('install-azure-account', () => {
     env.DEBUGTELEMETRY = 1;
     env.CODE_TESTS_WORKSPACE = path.join(__dirname, 'test/test.code-workspace');
     env.CODE_TESTS_PATH = path.join(__dirname, 'dist/test');
